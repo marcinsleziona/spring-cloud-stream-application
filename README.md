@@ -10,7 +10,7 @@ Then it scatter results into two queues -> scatterResults
 Then it prints only Poland results -> printPolandResults
 
 ## How to run the application 
-Run Kafka locally on localhost:9093
+Run Kafka locally on localhost:9093 \
 Run the application mvn spring-boot:run
 
 
