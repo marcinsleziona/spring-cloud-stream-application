@@ -1,0 +1,66 @@
+server:
+  port: 8080
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+  cloud:
+    function:
+      #definition: pullCountries;pullResults;printResults;dispatchPolandResults;printPolandResults;dispatchGermanyResults;printGermanyResults
+      #definition: pullCountries;pullResults;dispatchPolandResults;printPolandResults;dispatchGermanyResults;printGermanyResults;mergeDecemberResults
+      #definition: pullCountries;pullResults;dispatchPolandResults;dispatchGermanyResults;mergeDecemberResults;printMergedDecemberResults
+      #definition: pullCountries;pullResults;filterDecemberResults;scatterResults;printPolandResults;printGermanyResults
+      #definition: pullCountries;pullResults;filterDecemberResults;scatterResults;mergeResults;printMergedResults
+      definition: pullCountries;pullResults;filterDecemberResults;scatterResults;printPolandResults
+    stream:
+      poller:
+        fixed-delay: 20000
+      function:
+        bindings:
+          pullCountries-out-0: countries
+      bindings:
+        pullResults-in-0:
+          destination: countries
+        pullResults-out-0:
+          destination: results
+
+        printResults-in-0:
+          destination: results
+          group: printResults-group
+
+        filterDecemberResults-in-0:
+          destination: results
+          group: filterDecemberResults-group
+        filterDecemberResults-out-0:
+          destination: results-december
+          group: filterDecemberResults-group
+
+        scatterResults-in-0:
+#          destination: results
+          destination: results-december
+          group: scatterResults-group
+        scatterResults-out-0:
+          destination: poland-results
+        scatterResults-out-1:
+          destination: germany-results
+
+        printPolandResults-in-0:
+          destination: poland-results
+          group: printPolandResults-group
+
+        printGermanyResults-in-0:
+          destination: germany-results
+          group: printGermanyResults-group
+
+        mergeResults-in-0:
+          destination: poland-results
+          group: mergeResults-group
+        mergeResults-in-1:
+          destination: germany-results
+          group: mergeResults-group
+        mergeResults-out-0:
+          destination: merged-results
+
+        printMergedResults-in-0:
+          destination: merged-results
+          group: printMergedResults-group
