@@ -10,7 +10,10 @@ Then it scatter results into two queues -> scatterResults
 Then it prints only Poland results -> printPolandResults
 
 ## How to run the application 
-Run Kafka locally on localhost:9093 \
+Run Kafka locally on localhost:9092 (docker-compose -f docker\docker-compose.yml up -d) \
 Run the application mvn spring-boot:run
 
-
+## How to stop everything
+Stop the application \
+Stop Kafka application (docker-compose -f docker\docker-compose.yml stop)
+Remove stopped Kafka containers (docker-compose -f docker\docker-compose.yml rm)
